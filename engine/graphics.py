@@ -1,12 +1,15 @@
 import pygame
 
-class GraphicsEngine:
+class RenderSystem:
     def __init__(self, screen):
         self.screen = screen
-        self.background_color = (255, 255, 255)  # White background
+        self.settings = None  # Will be set later
 
-    def clear_screen(self):
-        self.screen.fill(self.background_color)
-
-    def update_display(self):
-        pygame.display.flip()
+    def render(self, entities):
+        self.screen.fill(self.settings.background_color)
+        for entity in entities:
+            sprite = entity.get_component('SpriteComponent')
+            transform = entity.get_component('TransformComponent')
+            if sprite and transform:
+                sprite.rect.center = transform.position
+                self.screen.blit(sprite.image, sprite.rect)
